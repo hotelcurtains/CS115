@@ -250,6 +250,7 @@ everything you do on a cpu gets converted to binary and has some operation done 
 N.B.
 ![logic tables and symbols for AND, OR, and NOT gates](image-3.png)
 key:
+- everything can be written with AND, OR, and/or NOT, it just might be impractical
 - addition = OR
   - `x + y` = `x OR y`
 - multiplication = AND
@@ -288,8 +289,6 @@ let's try making an odd parity circuit: a function with ***3*** inputs where the
 
 we'll use the minterm expansion principle (i.e. pull out all the conditions that return 1, OR them, then reduce):
 ![example of the minterm expansion principle](image-2.png)
-and painstakingly diagram the circuit:
-![a diagram of the odd parity circuit](image-4.png)
 
 ## Binary Adder
 1. take the carry-in (if this is the first bit, it will be 0)
@@ -302,13 +301,39 @@ and painstakingly diagram the circuit:
 |0|0|0       |0  |0        |
 |0|0|1       |1  |0        |
 |0|1|0       |1  |0        |
-|0|1|1       |1  |1        |
 |0|1|1       |0  |1        |
 |1|0|0       |1  |0        |
 |1|0|1       |0  |1        |
 |1|1|0       |0  |1        |
 |1|1|1       |1  |1        |
 
-we can find just the sum using the parity circuit. but what's the formula for carry-out? i was gonna derive it but idk how. here's the expression:
+we can find just the sum using the parity circuit. here's how you find the carry-out: `Cout = xy + Cin(x⊕y)`
 
-`Cout = xy + Cin(x⊕y)`
+## De Morgan's Laws
+-  NOT(xy) = x̄ + ȳ
+-  x̄ + ȳ = NOT(xy)
+
+you can prove this somehow but who cares
+
+# History of Computing
+- starting from the creation of actual computers
+- started with electric logic gates
+- used to run off small relays
+  - a stray moth flying into a relay and breaking it created the term computer bug
+- then vacuum tubes
+  - whole system weighed 30 tons
+  - had to be replaced often
+- integrated circuits
+  - this is what we use now
+  - hard to make
+
+## People
+- Alan Turing
+  - father of computer science
+  - code breaker in WWII
+    - created Enigma
+- Joan Clarke
+  - also did a lot
+  - less popular because women were ignored
+
+## SR or RS latch
