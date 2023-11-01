@@ -336,4 +336,21 @@ you can prove this somehow but who cares
   - also did a lot
   - less popular because women were ignored
 
+# One-bit Memory
 ## SR or RS latch
+![a diagram of an SR or RS latch](image.png)
+- this symbol is a NOR gate. it look like an OR gate with the NOT circle after it
+- maybe we want to store 1.
+  - set S (set bit) to 1 and R (reset bit) to 0
+  - Q will equal 1 and be stored, !Q will be reset to 0
+  - Q and !Q will always be opposite
+## D-Latch
+- stops user from pressing both S and R at once
+## RAM
+- two address bits + 3 data bits + write/read
+- 10 110 0 = at the 10th position, write 110
+- sends the strobe electricity iff the address is correct
+  - strobe takes an AND of the read/write bit and D
+  - sends electricity to the D-latch to write at that address
+  - works because only one address will be written to because the strobe must be on AND it must be trying to write to the address
+- 
