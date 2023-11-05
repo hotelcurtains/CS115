@@ -1,9 +1,13 @@
-############################################################
+# mandelbrot.py
+# CS 115 Lab 9
+#
 # Name: Daniel Detore
 # Pledge: I pledge my honor that I have abided by the Stevens Honor System.
-# CS115 Lab 9
-#
-############################################################
+
+# keep this import line...
+from cs5png import PNGImage
+
+# start your Lab 9 functions here:
 
 def mult( c, n ):
     """ mult uses only a loop and addition to multiply c by the integer n"""
@@ -40,7 +44,7 @@ def weWantThisPixel( col, row ):
     """ a function that returns True if we want
     the pixel at col, row and False otherwise
     """
-    if col % 10 == 0 or row % 10 == 0:
+    if col % 10 == 0 and row % 10 == 0:
         return True
     else:
         return False
@@ -64,7 +68,7 @@ if col % 10 == 0 and row % 10 == 0:
 to:
 if col % 10 == 0 or row % 10 == 0:
 
-then we get a full grid rather than a point lattice.
+then we get a line grid rather than a dot grid.
 '''
 
 def scale(pix, pixMax, floatMin, floatMax):
@@ -78,7 +82,7 @@ def scale(pix, pixMax, floatMin, floatMax):
     return (1.0*pix / pixMax * (floatMax - floatMin)) + floatMin
 
 def mset():
-    """ creates a 300x200 image of the Mandelbrot set
+    """ mset takes no input and creates a 300x200 image of the Mandelbrot set
     """
     width = 300
     height = 200
@@ -93,11 +97,38 @@ def mset():
             x = scale(col,width,-2.0,1)
             y = scale(row,height,-1,1)
             c = x + y*1j
-            if inMSet( c, 25 ) == True:
+            if inMSet( c, 25 ):
                 image.plotPoint(col, row)
 
     # we looped through every image pixel; we now write the file
 
     image.saveFile()
+
+
+assert mult( 6, 7 ) == 42
+assert mult( 1.5, 28 ) == 42.0
+
+assert update( 1, 3 ) == 5 
+assert update( -1, 3 ) == -1 
+assert update( -1, 10 ) == 0
+
+c = 0 + 0j 
+assert inMSet(c, 25)
+c = 3 + 4j
+assert not inMSet(c, 25)
+c = 0.3 + -0.5j
+assert inMSet(c, 25)
+c = -0.7 + 0.3j
+assert not inMSet(c, 25)
+c = 0.42 + 0.2j 
+assert inMSet(c, 25)
+assert not inMSet(c, 50)
+
+#test()
+
+assert scale(100, 200, -2.0, 1.0)  == -0.5
+assert scale(100, 200, -1.5, 1.5)  == 0.0
+assert scale(100, 300, -2.0, 1.0)  == -1.0
+assert scale(25, 300, -2.0, 1.0) == -1.75
 
 mset()
