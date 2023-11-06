@@ -284,7 +284,7 @@ NOR gate:
 |1 |0 |0       |
 |1 |1 |0       |
 
-## Odd Parity Cicuit
+## Odd Parity Circuit
 let's try making an odd parity circuit: a function with ***3*** inputs where the output is 1 *iff* the amount of 1s is odd.
 
 we'll use the minterm expansion principle (i.e. pull out all the conditions that return 1, OR them, then reduce):

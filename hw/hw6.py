@@ -98,3 +98,24 @@ def compression(S):
     """ takes 64-bit binary string S and returns the ratio
     of its compressed size over its uncompressed size. """
     return len(compress(S))/len(S)
+
+
+print(compression("0"*31+"1"+"0"*32))
+
+# 64 * COMPRESSED_BLOCK_SIZE, assuming there are no runs of like bits in the entire image (like a checkerboard)
+# in the default case here it would be 320 bits.
+
+# images with more runs of pixels will usually have ratios close to or less than 1.
+# those with fewer runs will often be greater than 1.
+# penguin: 1.484375
+# smile: 1.328125
+# five: 1.015625
+# my own tests:
+# compression("01"*32) == 5.0
+# compression("0"*64) == 0.390625
+# compression("0"*31+"1"+"0"*32) == 0.390625
+
+# this is impossible because if there are no runs of like pixels in the image,
+# it cannot be compressed. If the algorithm is still somehow compressing the image
+# then it must be losing data, and therefore his claim that there is a perfect inverse
+# is impossible because the lost data from that compression cannot be recovered after the lossy operation.
