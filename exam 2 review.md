@@ -1,9 +1,19 @@
-tail recursion
-minterm expansion
-memoizing given code
-write test statements (i.e. assert statements) for one of these
+- addition = OR
+  - `x + y` = `x OR y`
+- multiplication = AND
+  - `xy` = `x AND y`
+  - `xy(x + y)` = `(x AND y) AND (x OR y)`
+- `x̄` = `NOT x` = `!x` = `x'`
+  - x̄ seems to be the preferred symbol here
+- `x ↓ y` = `x NOR y`
+- `x ⊕ y` = `x XOR y`
 
-ȳ+y = True
+parity circuit example:
+
+we'll use the minterm expansion principle (i.e. pull out all the conditions that return 1, OR them, then reduce):
+![example of the minterm expansion principle](image-2.png)
+
+N.B. ȳ+y = True
 
 logic & test function example:
 ```python
@@ -48,3 +58,16 @@ def LCS(S1,S2):
 1. convert abs(n) to binary: (28)10 = (0000011100)2
 2. invert all the bits: 1111100011
 3. add 1: 1111100100
+
+-11 in 8 bits:
+
+1. (-11)10 = (00001011)2
+2. negate 00001011 = 11110100
+3. 11110100 + 00000001 = 111101014
+4. check:
+    ```
+    1  1  1  1 0 1 0 1 
+    -128 64 32 16 8 4 2 1
+
+    --> base 10: -128+64+32+16+0+4+0+1 = -11
+    ```
