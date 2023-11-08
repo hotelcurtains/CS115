@@ -12,7 +12,7 @@ parity circuit example:
 
 we'll use the minterm expansion principle (i.e. pull out all the conditions that return 1, OR them, then reduce):
 ![example of the minterm expansion principle](image-2.png)
-
+![a diagram of logic gates and their symbols](image-1.png)
 N.B. ȳ+y = True
 
 logic & test function example:
@@ -49,7 +49,7 @@ def LCS(S1,S2):
         chopS2 = LCS(S1,S2[1:])
         result = max(chopS1,chopS2)
     memo[(S1,S2)] = result
-    return result        
+    return result
 ```
 
 
