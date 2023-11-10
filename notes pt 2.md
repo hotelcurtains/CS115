@@ -353,4 +353,60 @@ you can prove this somehow but who cares
   - strobe takes an AND of the read/write bit and D
   - sends electricity to the D-latch to write at that address
   - works because only one address will be written to because the strobe must be on AND it must be trying to write to the address
-- 
+
+# Data Representation
+- every variable is stored in a certain location in memory.
+- every time you change the value of a variable, it is pointed to a new allocation rather than overwriting the old one. e.g.:
+```py
+>>> x = 2020
+>>> y = 'A'
+>>> id(x)
+2175159779824
+>>> x = 42
+>>> id(x)
+140713400258264
+>>> id(y)
+140713400318680
+>>> y = "B"
+>>> id(y)
+140713400318728
+```
+
+- assigning a variable the value it already has does not change its location:
+```py
+>>> z="vaccine" 
+>>> id(z)       
+2175157057840
+>>> z="vaccine"
+>>> id(z)       
+2175157057840
+```
+
+- assigning a variable with another variable points it to the same memory location:
+```py
+>>> x = 5
+>>> id(x) 
+140713400257080
+>>> a = x
+>>> id(a)  
+140713400257080
+>>> a == x         
+True
+>>> id(a) == id(x) 
+True
+```
+
+- if one changes, it will dereference and get a different value
+```py
+cont.
+>>> x=34            
+>>> id(x) == id(a) 
+False
+>>> a = 34
+>>> id(x) == id(a)
+True
+>>> 
+```
+
+Lists are mutable. does this change anything?
+lists are made up of references to individual values. changing one value (i.e. `w[2]=10`) changes that reference and the id of the list, but not of the other items in the list.
