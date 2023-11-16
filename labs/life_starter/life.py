@@ -93,19 +93,22 @@ def innerReverse(A):
     return L
 
 def next_life_generation(A):
-    """ makes a copy of A and then advanced one
+    """ makes a copy of A and then advances one
     generation of Conway's game of life within
     the *inner cells* of that copy.
     The outer edge always stays 0.
     """
     def countLiveNeighbors(x,y,board):
+        """ takes a cell's coordinates, integers x and y,
+        on the given board and caluclates how many
+        active neighbors are surrounding it.
+        """
         sum = 0
-        for i in range(-1,2):
+        for i in [-1,0,1]:
             sum += board[x+i][y-1]
-        for i in range(-1,2,2):
-            sum += board[x+i][y]
-        for i in range(-1,2):
             sum += board[x+i][y+1]
+        for i in [-1,1]:
+            sum += board[x+i][y]
         return sum
     newA = copy(A)
     w = len(newA[0])
