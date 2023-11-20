@@ -13,6 +13,8 @@ we have (42)10 and want to shift it one place *left*
 ```
 multiply by ten and fill remaining digit with 0. this returns 420
 
+---
+
 now we want to left-shift (0011)2:
 ```
  011        = (3)10
@@ -32,6 +34,8 @@ _04
 004
 ```
 integer divide by ten and fill remaining digit with 0. this returns 4
+
+---
 
 now we want to right-shift 0101:
 ```
@@ -121,6 +125,9 @@ integer divide by 10 and fill vacant place with 0.
 
 6 + 24 + 96 = 126
 ```
+
+---
+
 in base 2:
 - \>\> = shift right = //2
 - \>\> = shift left = *2
@@ -134,6 +141,8 @@ in base 2:
 
 110 + 11000 + 1100000 = 1111110
 ```
+
+---
 
 back in base 10
 ```
@@ -184,7 +193,7 @@ having the smaller number in the division column means less steps bc you will re
 = 10001               =   1
   ^ overflow
 ```
-## Correctly Converting/Representing Negatives
+## Two's Compliment the Right Way
 convert -6 to binary as a usable two's compliment number; i.e. (-6)10 = (?)2
 ```
 find positive 6 in binary first:
@@ -205,6 +214,8 @@ this should be our final answer. check:
 ```
 our final answer is (1010)2. this is now usable in math as -6.
 
+---
+
 now find -30 in binary with 6 bits:
 ```
 convert absolute value to binary:
@@ -221,6 +232,8 @@ check:
  -32 16 8 4 2 1
 ```
 
+---
+
 -11 in 8 bits:
 ```
 (-11)10 = (00001011)2
@@ -231,6 +244,8 @@ check:
    1  1  1  1 0 1 0 1 --> base 10: -128+64+32+16+0+4+0+1 = -11
 -128 64 32 16 8 4 2 1
 ```
+
+---
 
 negative 1 in any amount of bits is all 1s, assuming 2's compliment.
 - `(111)2` = -1
@@ -372,7 +387,6 @@ you can prove this somehow but who cares
 >>> id(y)
 140713400318728
 ```
-
 - assigning a variable the value it already has does not change its location:
 ```py
 >>> z="vaccine" 
@@ -382,7 +396,7 @@ you can prove this somehow but who cares
 >>> id(z)       
 2175157057840
 ```
-
+---
 - assigning a variable with another variable points it to the same memory location:
 ```py
 >>> x = 5
@@ -396,7 +410,7 @@ True
 >>> id(a) == id(x) 
 True
 ```
-
+---
 - if one changes, it will dereference and get a different value
 ```py
 cont.
@@ -423,6 +437,19 @@ they're both shallow copies but if you do
 - M = list(L)
   - the changes will not be made to both
   - because they have the same values but are stored in different memory addresses
+
+further example:
+```py
+L = [[1,2][2,3]]
+M = L               # shallow copy
+
+M = list(L)         # deep copy of the top-level list
+                    # shallow copy of the inner lists.
+                    # still considered shallow.
+
+M = [L[0]*1,L[0]*1] # this is a deep copy. idk why.
+```
+- there is also a package you can download that automatically deep copies a list for you but we're probably never going to be given it in the class.
 
 # Input-Output
 ## Getting Input from the User
@@ -537,3 +564,124 @@ def read_preferences(filename):
   - readable
   - easy code construction
   - start point for documentation
+
+# Exceptions
+- the program stops when it hits an error
+- two errors:
+  - syntax error
+    - something doesn't make sense
+  - exception
+    - the code makes sense but something in the code won't let it run
+    - doing something you're not allowed to do
+- your can raise your own exception:
+```py
+x = 10
+if x > 5:
+  raise Exception("x should not exceed 5. Its value is",x)
+```
+```
+Exception: ('x should not exceed 5. Its value is', 10)
+```
+- assert: does nothing if it receives `True`, otherwise it raises an `AssertionError`
+  - you can actually have it give a message if it is false:
+```py
+assert list == sortedList,"list is not sorted"
+```
+
+## Error Handling
+- show exceptions without stopping the program with a try-catch block.
+```py
+try:
+  x = 0/0
+except ZeroDivisionError as error:
+  print(error)
+```
+- will run the `try` block until it gets an exception
+  - if it finds one it moves to `except`
+- you need to determine how to handle the error message
+- you can specify the error you want to catch or leave it generic
+- you can have multiple `except` blocks
+- avoid empty `except` clauses
+  - just handle the error
+- you can have an `else` clause that runs if no exceptions occur
+- there can also be a `finally` block that runs no matter what happens
+- this will be on test 3
+
+### Try-Catch Example
+```py
+try:
+  z = int(input("Enter a number: "))
+  x = y/z
+  print(x)
+except ZeroDivisionError as error:
+  print(error)
+except TypeError as err:
+  print(err)
+except:
+  print("Some error happened.")
+else: 
+  print("x is calculated correctly")
+finally:
+  print("Done.")
+```
+---
+```
+Enter a number: 6
+Some error happened.
+Done.
+```
+y doesn't exist so the second line raises a `NameError`, which we don't specify so the generic `except` runs.
+---
+```
+Enter a number: string
+Some error happened.
+Done.
+```
+notice this executes the generic `except` block because casting a string to an int raises a `ValueError`, not a `TypeError`
+
+---
+```
+Enter a number: 0
+Some error happened.
+Done.
+```
+this *still* executes the generic except. y still doesn't exist so this raises a `NameError` and NOT the `ZeroDivisionError`.
+
+---
+let's fix the code.
+```py
+try:
+  z = int(input("Enter a number: "))
+  x = 12/z
+  print(x)
+except ZeroDivisionError as error:
+  print(error)
+except TypeError as err:
+  print(err)
+except:
+  print("Some error happened.")
+else: 
+  print("x is calculated correctly")
+finally:
+  print("Done.")
+```
+```
+Enter a number: 3
+4.0
+x is calculated correctly
+Done.
+```
+it runs, in order:
+```py
+try:
+  z = int(input("Enter a number: "))
+  x = 12/z
+  print(x)
+else: 
+  print("x is calculated correctly")
+finally:
+  print("Done.")
+```
+skipping all of the except blocks because it no longer throws any exceptions.
+
+here's a [list of built-in exceptions](https://docs.python.org/3/library/exceptions.html).
