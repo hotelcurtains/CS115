@@ -280,24 +280,24 @@ key:
 e.g., xor:
 - a function of two binary variables. the output is 1 *iff* exactly one of the inputs is 1.
 
-  |x |y |xor(x,y)|
-  |--|--|------|
-  |0 |0 |0|
-  |0 |1 |1|
-  |1 |0 |1|
-  |1 |1 |0|
+  | x   | y   | xor(x,y) |
+  | --- | --- | -------- |
+  | 0   | 0   | 0        |
+  | 0   | 1   | 1        |
+  | 1   | 0   | 1        |
+  | 1   | 1   | 0        |
 
 - formula: `x̄y + xȳ`
 - shorthand is ⊕:
   - `x ⊕ y` = `x̄y + xȳ`
 
 NOR gate:
-|x |y |nor(x,y)|
-|--|--|--------|
-|0 |0 |1       |
-|0 |1 |0       |
-|1 |0 |0       |
-|1 |1 |0       |
+| x   | y   | nor(x,y) |
+| --- | --- | -------- |
+| 0   | 0   | 1        |
+| 0   | 1   | 0        |
+| 1   | 0   | 0        |
+| 1   | 1   | 0        |
 
 ## Odd Parity Circuit
 let's try making an odd parity circuit: a function with ***3*** inputs where the output is 1 *iff* the amount of 1s is odd.
@@ -311,16 +311,16 @@ we'll use the minterm expansion principle (i.e. pull out all the conditions that
 3. carry out a 1 if necessary, otherwise carry out a 0
 4. restart
 
-|x|y|carry-in|sum|carry-out|
-|-|-|--------|---|---------|
-|0|0|0       |0  |0        |
-|0|0|1       |1  |0        |
-|0|1|0       |1  |0        |
-|0|1|1       |0  |1        |
-|1|0|0       |1  |0        |
-|1|0|1       |0  |1        |
-|1|1|0       |0  |1        |
-|1|1|1       |1  |1        |
+| x   | y   | carry-in | sum | carry-out |
+| --- | --- | -------- | --- | --------- |
+| 0   | 0   | 0        | 0   | 0         |
+| 0   | 0   | 1        | 1   | 0         |
+| 0   | 1   | 0        | 1   | 0         |
+| 0   | 1   | 1        | 0   | 1         |
+| 1   | 0   | 0        | 1   | 0         |
+| 1   | 0   | 1        | 0   | 1         |
+| 1   | 1   | 0        | 0   | 1         |
+| 1   | 1   | 1        | 1   | 1         |
 
 we can find just the sum using the parity circuit. here's how you find the carry-out: `Cout = xy + Cin(x⊕y)`
 
@@ -631,6 +631,7 @@ Some error happened.
 Done.
 ```
 y doesn't exist so the second line raises a `NameError`, which we don't specify so the generic `except` runs.
+
 ---
 ```
 Enter a number: string
@@ -685,3 +686,110 @@ finally:
 skipping all of the except blocks because it no longer throws any exceptions.
 
 here's a [list of built-in exceptions](https://docs.python.org/3/library/exceptions.html).
+
+# Loop Tracing
+
+```py
+total = 0
+for i in range(1,10,3):
+  total += i
+print(total)
+```
+
+| iteration     | i   | total |
+| ------------- | --- | ----- |
+| initial       | /   | 0     |
+| 1st iteration | 1   | 1     |
+| 2nd iteration | 4   | 5     |
+| 3rd iteration | 7   | 12    |
+
+---
+
+```py
+i = 0
+count = 3
+while i < 15:
+  for k in range(5,8): #[5,6,7]. equivalent to count+=18
+    count += k
+  i += 3
+  if i > 10:
+    break
+```
+| iteration     | i   | count |
+| ------------- | --- | ----- |
+| initial       | 0   | 3     |
+| 1st iteration | 3   | 21    |
+| 2nd iteration | 6   | 39    |
+| 3rd iteration | 9   | 57    |
+| 4th iteration | 12  | 75    |
+
+---
+
+```py
+i = 0
+count = 3
+while i < 15:
+  for k in range(5,8): #[5,6,7]. equivalent to count+=18
+    break  # ADDED THIS LINE
+    count += k
+  i += 3
+  print(i,count)
+  if i > 10:
+    break
+```
+| iteration     | i   | count |
+| ------------- | --- | ----- |
+| initial       | 0   | 3     |
+| 1st iteration | 3   | 3     |
+| 2nd iteration | 6   | 3     |
+| 3rd iteration | 9   | 3     |
+| 4th iteration | 12  | 3     |
+
+---
+
+N.B.: string comparisons use ASCII codes, not just letters, so a capital letter will be less than any lowercase letter despite what letter it actually is.
+
+```py
+x = list(userPrefs)
+def numMatchesFast(userPrefs, storedUserPrefs):
+    ''' return the number of elements that match between
+        the lists userPrefs and storedUserPrefs. O(nlogn)
+    '''
+    x = list(userPrefs)
+    x.sort()
+    y = list(storedUserPrefs)
+    y.sort()
+    i,j, cnt = 0,0,0
+    while i < len(x) and j < len(y):
+        if x[i] == y[j]:
+            cnt += 1
+            i += 1
+            j += 1
+        elif x[i] > y[j]:
+            j += 1
+        else:
+            i += 1
+    return cnt
+```
+|               | i | j | cnt |
+| ------------- | - | - | --- |
+| initial       | 0 | 0 | 0   |
+| 1st iteration | 1 | 0 | 0   |
+| 2nd iteration | 2 | 1 | 1   |
+| 3rd iteration | 2 | 2 | 1   |
+| 4th iteration | 2 | 3 | 1   |
+| 5th iteration | 3 | 4 | 2   |
+
+
+# Classes
+```py
+class Rational:
+  def __init__(self,n,d): #constructor
+    if d == 0:
+      raise ZeroDivisionError
+    else:
+      self.numerator = n
+      self.denominator = d
+  def isZero(self):
+    return self.numerator == 0
+```
