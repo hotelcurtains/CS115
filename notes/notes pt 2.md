@@ -784,12 +784,64 @@ def numMatchesFast(userPrefs, storedUserPrefs):
 # Classes
 ```py
 class Rational:
-  def __init__(self,n,d): #constructor
+  def __init__(self,n,d):
     if d == 0:
-      raise ZeroDivisionError
+      raise ZeroDivisionError("Denominator cannot be zero!")
     else:
-      self.numerator = n
       self.denominator = d
+      self.numerator = n
   def isZero(self):
     return self.numerator == 0
+  def __add__(self,other):
+    newNumerator = self.numerator * other.denominator +\
+                   other.numerator * self.denominator
+    newDenominator = self.denominator * other.denominator
+    return Rational(newNumerator,newDenominator)
+  def __ge__(self,other):
+    return self.numerator * other.denominator >= self.denominator * other.numerator
+  def __eq__(self,other): 
+    # checking cross-products
+    #even if they are at different levels of simplification this will still work
+    return self.numerator * other.denominator == self.denominator * other.numerator
+  def __str__(self):
+    return str(self.numerator)+" / "+str(self.denominator)
+```
+- `self.variable`: changes per object in this class
+- `variable`: stays the same with every object.
+- same with `function(self,arg)` vs `function(arg)`
+- the `__` around some functions are used to overwrite included functions
+  - this way you won't do it accidentally
+- when you save a file that only holds a class its file name MUST be the same as the class name
+  - for testing purposes, you can make a main() function that runs some functions for you
+    - however you MUST REMOVE IT in your final version (i.e. when you hand it in or use it in another file)
+- `__eq__(self,other)` is used for the `==` operator
+- `__ge__(self,other)` is used for the `>=` operator
+  - you can have any name for the second object
+- that escape character `\` in `add()` lets you skip to the next line without the interpreter yelling at you
+
+
+this class in use:
+```py
+>>> r1 = Rational(1,2) 
+>>> r2 = Rational(1,2) 
+>>> print(r1.add(r2)) 
+4 / 4
+>>> print(r1.add(r2) == Rational(1,1)) 
+True
+```
+```py
+>>> r1 = Rational(6,1000)      
+>>> r2 = Rational(36,1000)  
+>>> r1 == r2
+False
+>>> r2 >= r2 
+True
+```
+```py
+>>> r1 = Rational(1,2) 
+>>> r2 = Rational(1,2) 
+>>> r1 + r2
+<__main__.Rational object at 0x000001ED05866450>
+>>> print(r1+r2) 
+4 / 4
 ```
