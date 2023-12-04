@@ -801,7 +801,7 @@ class Rational:
     return self.numerator * other.denominator >= self.denominator * other.numerator
   def __eq__(self,other): 
     # checking cross-products
-    #even if they are at different levels of simplification this will still work
+    # even if they are at different levels of simplification this will still work
     return self.numerator * other.denominator == self.denominator * other.numerator
   def __str__(self):
     return str(self.numerator)+" / "+str(self.denominator)
@@ -811,14 +811,17 @@ class Rational:
 - same with `function(self,arg)` vs `function(arg)`
 - the `__` around some functions are used to overwrite included functions
   - this way you won't do it accidentally
+  - these are reserved function names 
+    - (even though you can still name a function the words inside)
 - when you save a file that only holds a class its file name MUST be the same as the class name
-  - for testing purposes, you can make a main() function that runs some functions for you
+  - for testing purposes, you can make a main() function that runs some functions for you in the class file
     - however you MUST REMOVE IT in your final version (i.e. when you hand it in or use it in another file)
 - `__eq__(self,other)` is used for the `==` operator
 - `__ge__(self,other)` is used for the `>=` operator
   - you can have any name for the second object
 - that escape character `\` in `add()` lets you skip to the next line without the interpreter yelling at you
-
+- class names *should* always start with a capital letter
+  - they don't have to, python won't enforce this, but you should
 
 this class in use:
 ```py
@@ -845,3 +848,51 @@ True
 >>> print(r1+r2) 
 4 / 4
 ```
+
+## Underscores
+- hypothetically if we named a variable `self.__variable` it is now "private"
+  - docs call it "name mangling"
+  - just ignores code outside of the class declaration calling that variable
+    - i.e. will not throw an error but will not do anything
+  - once you mangle it you have to add accessors/getters (`get_numerator(self)`) and mutators/setters (`set_numerator(self,newN)`) if you want the code to still have access to those things
+- a single leading underscore `_name` tells people this is meant for internal use only, but they can access it if they really want to
+  - the interpreter is not enforcing it at all because it thinks that's just another character in the name
+- a single trailing underscore `name_` lets you use a keyword as a variable name
+  - i.e. `str_` or `def_`
+- a single underscore in something like a for loop:
+  ```py
+  for _ in range(5):
+    print("Welcome")
+  ```
+  - shows that the current current iteration does not matter because we won't use it
+    - you can still access it if you decide to later but this is just to signal that you aren't using the variable
+- putting a single underscore by itself into the interactive shell will reprint the last line the shell output
+
+
+## Inheritance
+let's make a general class as a base class or superclass:
+```py
+class Person:
+  def __init__(self, first, last):
+    self.firstName = first
+    self.lastName = last
+  def asleep(self, time)
+    return 0<= time <= 7
+  def __str__(self):
+    return self.firstName + " " + self.lastName
+
+class Student(Person): # shows that Student *is a* subclass of Person
+  def __init__(self, first, last, Id):
+    Person.__init__(self, first, last)
+    # we've never sent self before (only put it as an argument)
+    # now we need to because Person's __init__ needs to take the 
+    # Student object to work with so it doesn't return a Person
+  def asleep(self,time)
+    return 0 <= time <= 3
+    # you can use the parent class's functions normally OR
+    # you can override them like we're doing here
+  def __str__(self):
+    return Person.__str__(self)+", asleep is "+str(asleep(2))
+```
+- hypothetically if we remove the `Student` class's `asleep` function, it will fall back on `Person` class's `asleep`.
+- 
