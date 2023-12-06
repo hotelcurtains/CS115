@@ -907,6 +907,7 @@ class Automobile():
     self.__make = make
     self.__model = model
     self.__price = price
+  
   def get_make(self):
     return self.make
   def get_model(self):
