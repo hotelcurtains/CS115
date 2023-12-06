@@ -3,7 +3,7 @@ CS115 - Car Test Script
 '''
 import unittest
 
-from lab12car import *
+from Car import *
 
 class Test(unittest.TestCase):
 
