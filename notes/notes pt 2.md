@@ -809,10 +809,6 @@ class Rational:
 - `self.variable`: changes per object in this class
 - `variable`: stays the same with every object.
 - same with `function(self,arg)` vs `function(arg)`
-- the `__` around some functions are used to overwrite included functions
-  - this way you won't do it accidentally
-  - these are reserved function names 
-    - (even though you can still name a function the words inside)
 - when you save a file that only holds a class its file name MUST be the same as the class name
   - for testing purposes, you can make a main() function that runs some functions for you in the class file
     - however you MUST REMOVE IT in your final version (i.e. when you hand it in or use it in another file)
@@ -850,8 +846,13 @@ True
 ```
 
 ## Underscores
-- hypothetically if we named a variable `self.__variable` it is now "private"
-  - docs call it "name mangling"
+- the `__` around some functions are used to overwrite included functions
+  - this way you won't do it accidentally
+  - these are reserved function names 
+    - (even though you can still name a function the words inside)
+  - - list of all [dunder methods](https://docs.python.org/3/reference/datamodel.html#special-method-names) from python themselves
+- hypothetically if we named a variable in the class `__variable` it is now "private"
+  - docs call it name mangling
   - just ignores code outside of the class declaration calling that variable
     - i.e. will not throw an error but will not do anything
   - once you mangle it you have to add accessors/getters (`get_numerator(self)`) and mutators/setters (`set_numerator(self,newN)`) if you want the code to still have access to those things
@@ -867,9 +868,12 @@ True
   - shows that the current current iteration does not matter because we won't use it
     - you can still access it if you decide to later but this is just to signal that you aren't using the variable
 - putting a single underscore by itself into the interactive shell will reprint the last line the shell output
+![basically all that information in a graph](image-6.png)
+[source](https://realpython.com/python-double-underscore/#public-interfaces-and-naming-conventions-in-python)
 
 
 ## Inheritance
+### Example 1
 let's make a general class as a base class or superclass:
 ```py
 class Person:
@@ -895,4 +899,64 @@ class Student(Person): # shows that Student *is a* subclass of Person
     return Person.__str__(self)+", asleep is "+str(asleep(2))
 ```
 - hypothetically if we remove the `Student` class's `asleep` function, it will fall back on `Person` class's `asleep`.
-- 
+
+### Example 2
+```py
+class Automobile():
+  def __init__(self,make,model,price):
+    self.__make = make
+    self.__model = model
+    self.__price = price
+  def get_make(self):
+    return self.make
+  def get_model(self):
+    return self.model
+  def get_price(self):
+    return self.price
+
+  def set_make(self, newMake):
+    self.__make = newMake
+  def set_model(self,newModel)
+    self.__model = newModel
+  def set_price(self, newPrice):
+    self.__price = newPrice
+
+  def __gt__(self,other):
+    return self.__price > other.__price
+  def __le__(self,other):
+    return self.__price <= other.__price
+
+class SUV(Automobile):
+  def __init__(self,make,model,price,pass_cap):
+    Automobile.__init__(self,make,model,price)
+    self.__pass_cap = pass_cap
+  def get_pass_cap(self):
+    return self.__pass_cap
+  def set_pass_cap(self,p):
+    self.__pass_cap = p
+  def __str__(self):
+    return self.__make + " " + self.__model
+```
+
+```
+>>> civic = Automobile('Honda','Civic',30000)
+>>> maserati = Automobile('Maserati','GT'40000)
+>>> print(civic)
+<__main__ =.Automobile object at 0x000000000>
+>>> print(crv)
+AttributeError: SUV has no attribute '_SUV__make'
+>>> civic > maserati
+False
+>>> civic <= maserati
+True
+>>> civic < maserati
+True
+```
+- to fix that error, replace the `self.__make` and `self.__model` calls with `self.get_make()` and `self.get_model()`. `SUV` as a subclass cannot access `Automobile`'s mangled variables
+- even though we never gave either class a `__lt__` function, it calls the `Object` comparison function. it's wrong, but it still returns a boolean.
+
+know:
+- exceptions
+- loop tracing
+- box-and-arrow diagrams
+- classes and inheritance
