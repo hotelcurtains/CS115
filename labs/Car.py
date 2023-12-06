@@ -30,16 +30,16 @@ class Car(object):
     '''Write getters for make, model, mpg, and tank_capacity.'''
 
     def get_make(self):
-        ''' Returns the value of __make. takes no arguemnts. '''
+        ''' Returns the value of __make. takes no arguments. '''
         return self.__make
     def get_model(self):
-        ''' Returns the value of __model. takes no arguemnts. '''
+        ''' Returns the value of __model. takes no arguments. '''
         return self.__model
     def get_mpg(self):
-        ''' Returns the value of __mpg. takes no arguemnts. '''
+        ''' Returns the value of __mpg. takes no arguments. '''
         return self.__mpg
     def get_tank_capacity(self):
-        ''' Returns the value of __tank_capacity. takes no arguemnts. '''
+        ''' Returns the value of __tank_capacity. takes no arguments. '''
         return self.__tank_capacity
 
     '''Write setters for mpg and tank_capacity.'''
@@ -56,7 +56,8 @@ class Car(object):
        gas.'''
 
     def get_total_range(self):
-        '''takes no arguments and returns the total distance the car can travel on a full tank of gas as a float. '''
+        '''takes no arguments and returns the total distance the car can travel
+        on a full tank of gas as a float. '''
         return self.__mpg*self.__tank_capacity
 
     def __str__(self):
@@ -101,6 +102,8 @@ class HybridCar(Car):
     '''
 
     def get_total_range(self):
+        '''Returns the total distance the car can travel on 
+        a full tank of gas and a fully charged battery.'''
         return Car.get_total_range(self) + self.get_battery_range()
 
     def __str__(self):
