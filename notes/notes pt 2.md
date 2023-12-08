@@ -954,10 +954,4 @@ True
 True
 ```
 - to fix that error, replace the `self.__make` and `self.__model` calls with `self.get_make()` and `self.get_model()`. `SUV` as a subclass cannot access `Automobile`'s mangled variables
-- even though we never gave either class a `__lt__` function, it calls the `Object` comparison function. it's wrong, but it still returns a boolean.
-
-know:
-- exceptions
-- loop tracing
-- box-and-arrow diagrams
-- classes and inheritance
+- even though we never gave either class a `__lt__` function, it calls the `Object` comparison function. it's not always right, but it still returns a boolean.

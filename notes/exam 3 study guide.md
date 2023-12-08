@@ -1,69 +1,104 @@
-- addition = OR
-  - `x + y` = `x OR y`
-- multiplication = AND
-  - `xy` = `x AND y`
-  - `xy(x + y)` = `(x AND y) AND (x OR y)`
-- `x̄` = `NOT x` = `!x` = `x'`
-  - x̄ seems to be the preferred symbol here
-- `x ⊕ y` = `x XOR y`
-- N.B.: `ȳ+y` = `True`
+know:
+- exceptions
+- loop tracing
+- box-and-arrow diagrams
+- classes and inheritance
 
-parity circuit example:
-
-we'll use the minterm expansion principle (i.e. pull out all the conditions that return 1, OR them, then reduce):
-![example of the minterm expansion principle](image-2.png)
-![a diagram of logic gates and their symbols](image-1.png)
-
-logic & test function example:
-```python
-def f(x,y,z):
-    return (not x and y and not z) or (x and z) # same as !xy!z + xz
-def test_function():
-    assert f(0,1,0) == 1
-    assert f(1,1,0) == 0
-    assert f(0,0,0) == 0
-```
-
-find the sum of squares of a list with tail recursion.
+# box-and-arrow diagram
 ```py
-def sumSq(L, total=0):
-    if L == []:
-        return total
-    else:
-        return sumSq(L[1:], total + L[0]**2)
+L = [[3,4][5,6]]
+M = L
+L[0][1] = 6
+M[1] = [3,3]
+print(L,M)
 ```
+![box-and-arrow diagram for that code](image-7.png)
 
-memoize the longest common substring problem.
 ```py
-memo = {}
-def LCS(S1,S2):
-    if (S1,S2) in memo:
-        return memo[(S1,S2)]
-    elif S1=="" or S2=="":
-        result = 0
-    elif S1[0] == S2[0]:
-        result = 1: LCS(S1[1:],S2[1:])
-    else:
-        chopS1 = LCS(S1[1:],S2)
-        chopS2 = LCS(S1,S2[1:])
-        result = max(chopS1,chopS2)
-    memo[(S1,S2)] = result
-    return result
+L = [[1,2][3,4]]
+M = list(L) #notice
+L[0][1] = 5
+M[1] = [6,6]
+print(L,M)
 ```
+![box-and-arrow diagram for that code](image-8.png)
+- you can do one drawing like this with the crosses OR have one drawing of everything right after being assigned and then what it looks like at the very end
+- there will be no deep copy example
 
+# exceptions
+```py
+try:
+    x=23
+    print(list(map(lambda y: y+1, x)))
+except TypeError:
+    print('This is a Type Error')
+except ZeroDivisionError:
+    print("This is an IO error")
+else:
+    print('Hello')
+finally:
+    print('Finally')
+print('Done here')
+```
+```
+This is a Type Error
+Finally
+Done here
+```
+- `map()` and `list()` need iterables and `x` is not, so it will throw a `TypeError`
+- if we removed the `except TypeError` block, it will print `Finally` and throw an error anyway
 
-(-28)10 to base 2, using 10 bits and two's compliment:
-1. convert abs(n) to binary: (28)10 = (0000011100)2
-2. invert all the bits: 1111100011
-3. add 1: 1111100100
+Errors/Exceptions to know:
+- ZeroDivisionError
+- NameError
+- TypeError
+- FileNotFoundError
+- IOError
+- KeyError
+- IndexError
+- AssertionError
+- RuntimeError
+- ValueError
+- SyntaxError
 
--11 in 8 bits:
-1. (-11)10 = (00001011)2
-2. negate 00001011 = 11110100
-3. 11110100 + 00000001 = 111101014
-4. check:
-    ```
-       1  1  1  1 0 1 0 1 
-    -128 64 32 16 8 4 2 1
-    --> base 10: -128+64+32+16+0+4+0+1 = -11
-    ```
+# Loop Tracing
+```py
+i = 4
+j = 16
+p = []
+while i< j:
+    i += 1
+    total = 0
+    for k in range(8,j,2):
+        total += k
+    p.append(total)
+    j -= 2
+    # hypothetical print statement that won't
+    # be given on the quiz but should be imagined:
+    print(i,j,p)
+```
+| iteration | i | j  | p               |
+| --------- | - | -- | --------------- |
+| before    | 4 | 16 | []              |
+| 0         | 5 | 14 | [44]            |
+| 1         | 6 | 12 | [44, 30]        |
+| 2         | 7 | 10 | [44, 30, 18]    |
+| 3         | 8 | 8  | [44, 30, 18, 8] |
+
+```py
+for i in range(10,0,-3):
+    j=4
+    total = 0
+    while j < i:
+        j += 1
+        total += j
+    # hypothetical print statement
+    print(i,j,total)
+```
+| iteration | i  | j  | total |
+| --------- | -- | -- | ----- |
+| before    | NA | NA | NA    |
+| 0         | 10 | 10 | 45    |
+| 1         | 7  | 7  | 18    |
+| 2         | 4  | 4  | 0     |
+| 3         | 1  | 4  | 0     |
